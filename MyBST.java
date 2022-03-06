@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+import javax.management.ValueExp;
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
+
 
 public class MyBST<K extends Comparable<K>,V>{
     MyBSTNode<K,V> root = null;
@@ -9,19 +12,110 @@ public class MyBST<K extends Comparable<K>,V>{
         return size;
     }
 
+    /**
+     * This method inserts a node containing the key and value given into BST.
+     * @param key Key of new node
+     * @param value value of new node
+     * @return the value of the node that was replaced or null if a new node is
+     * created
+     */
     public V insert(K key, V value){
-        // TODO
+        // key is null
+        if (key.equals(null)) throw new NullPointerException();
+        MyBSTNode<K,V> curr = this.root;
+        K currKey = this.root.getKey();
+        V currValue = this.root.getValue();
+        if (this.root == null) {
+            this.root = new MyBSTNode<K,V>(key, value, null);
+        }
+        while (curr != null) {
+            if (currKey.compareTo(key) == 0){
+                V temp = currValue;
+                curr.setValue(value);
+                return temp;
+            }
+            else if(key.compareTo(currKey) > 0) {
+                if (curr.getRight() != null) {
+                    curr = curr.getRight();
+                    currValue = curr.getValue();
+                    currKey = curr.getKey();
+                }
+                else {
+                    curr.setRight(new MyBSTNode<K,V>(key, value, curr));
+                    this.size++;
+                    return null;
+                }
+            }
+            else {
+                if (curr.getLeft() != null) {
+                    curr = curr.getLeft();
+                    currValue = curr.getValue();
+                    currKey = curr.getKey();
+                }
+                else {
+                    curr.setLeft(new MyBSTNode<K,V>(key, value, curr));
+                    this.size++;
+                    return null;
+                }
+            }
+
+        }  
         return null;
     }
 
+    /**
+     * This method looks for the node with the given key
+     * @param key key to look for
+     * @return the value of the node with the given key or null if there is no
+     * node. 
+     */
     public V search(K key){
-        // TODO
-        return null;
+        // always return null if key is null
+        if (key == null) return null;
+
+        MyBSTNode<K,V> curr = this.root;
+        V currValue = this.root.getValue();
+        K currKey= this.root.getKey();
+        
+        while(curr != null){
+            if (key.compareTo(currKey) == 0){
+                return currValue;   // node found!
+            }
+            // key is smaller, go to left child
+            else if (key.compareTo(currKey) < 0){
+                curr = curr.getLeft(); 
+                if (curr != null) {
+                    currValue = curr.getValue();
+                    currKey = curr.getKey();
+                }
+            }
+            // key is greater, go to right child
+            else{
+                curr = curr.getRight();
+                if (curr != null) {
+                    currValue = curr.getValue();
+                    currKey = curr.getKey();
+                }
+            }
+        }
+        return null; // node not found
     }
 
+    /**
+     * This method removes the node with given key.
+     * @param key key that determines which node will be removed
+     * @return value of removed node
+     */
     public V remove(K key){
-        // TODO
-        return null;
+        // if key is null, always return null 
+        if (key == null) return null;
+        if (this.search(key) != null){
+            V temp = this.search(key);
+            return temp;
+        }
+        else{
+            return null;
+        }
     }
     
     public ArrayList<MyBSTNode<K, V>> inorder(){
@@ -132,9 +226,6 @@ public class MyBST<K extends Comparable<K>,V>{
         }
 
         /**
-         * TODO: add inline comments for this method to demonstrate your
-         *   understanding of this method. The predecessor can be implemented
-         *   in a similar way.
          *
          * This method returns the in order successor of current node object.
          * It can be served as a helper method when implementing inorder().
@@ -142,15 +233,21 @@ public class MyBST<K extends Comparable<K>,V>{
          */
         public MyBSTNode<K, V> successor(){
             if(this.getRight() != null){
+                // set curr to right child
                 MyBSTNode<K,V> curr = this.getRight();
+                // go to left most node
                 while(curr.getLeft() != null){
                     curr = curr.getLeft();
                 }
                 return curr;
             }
+            // there is no right child
             else{
+                // get the parent node and current node
                 MyBSTNode<K,V> parent = this.getParent();
                 MyBSTNode<K,V> curr = this;
+                // get the parent node as long as this node is a right child
+                // this will give the node with the smallest key
                 while(parent != null && curr == parent.getRight()){
                     curr = parent;
                     parent = parent.getParent();
@@ -159,9 +256,32 @@ public class MyBST<K extends Comparable<K>,V>{
             }
         }
 
+        /**
+         * This mthodd returns the in order successor of currnet node object.
+         * It can be served as a helpeer method when implementing inorder().
+         * @return the predecessor of current node object
+         */
         public MyBSTNode<K, V> predecessor(){
-            // TODO
-            return null;
+            if (this.getLeft() != null) {
+                MyBSTNode<K,V> curr = this.getLeft();
+                // go to the right most node
+                while (curr.getRight() != null) {
+                    curr = curr.getRight();
+                }
+                return curr;
+            }
+            // no left child
+            else {
+                MyBSTNode<K,V> parent = this.getParent();
+                MyBSTNode<K,V> curr = this;
+                // get the parent node as long as this node is a left child
+                // this will give the node with the largest node
+                while(parent != null && curr == parent.getLeft()) {
+                    curr = parent;
+                    parent = parent.getParent();
+                }
+                return parent;
+            }
         }
 
         /** This method compares if two node objects are equal.
