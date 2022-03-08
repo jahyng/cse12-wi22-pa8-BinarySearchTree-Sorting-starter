@@ -109,12 +109,87 @@ public class MyBST<K extends Comparable<K>,V>{
     public V remove(K key){
         // if key is null, always return null 
         if (key == null) return null;
-        if (this.search(key) != null){
-            V temp = this.search(key);
-            return temp;
+
+        MyBSTNode<K,V> curr = this.root;
+        K currKey = this.root.getKey();
+        // V currValue = this.root.getValue();
+
+        // find the node with key and value
+        while (curr != null) {
+            if (currKey.compareTo(key) == 0){
+                break; // curr is the node we need to delete
+            }
+            else if(key.compareTo(currKey) > 0) { 
+                if (curr.getRight() != null) {
+                    curr = curr.getRight();
+                    // currValue = curr.getValue();
+                    currKey = curr.getKey();
+                }
+                else return null;
+            }
+            else {
+                if (curr.getLeft() != null) {
+                    curr = curr.getLeft();
+                    // currValue = curr.getValue();
+                    currKey = curr.getKey();
+                }
+                else return null;
+            }
+
         }
+
+        // has no children
+        if (curr.getRight() == null && curr.getLeft() == null){
+            V val = curr.getValue();
+            if (curr.getParent().getLeft() == curr) {
+                curr.getParent().setLeft(null);
+            }
+            else{
+                curr.getParent().setRight(null);
+            }
+            curr.setParent(null);
+            curr = null;
+            return val;
+        } 
+
+        // only left child
+        else if (curr.getRight() == null && curr.getLeft() != null){
+            V val = curr.getValue();
+            curr.getLeft().setParent(curr.getParent());
+            if (curr == curr.getParent().getLeft()) {
+                curr.getParent().setLeft(curr.getLeft());
+            }
+            else{
+                curr.getParent().setRight(curr.getLeft());
+            }
+            curr.setParent(null);
+            curr.setLeft(null);
+            return val;
+        }
+
+        // only right child
+        else if (curr.getRight() != null && curr.getLeft() == null){
+            V val = curr.getValue();
+            curr.getRight().setParent(curr.getParent());
+            if (curr == curr.getParent().getLeft()){
+                curr.getParent().setLeft(curr.getRight());
+            }
+            else{
+                curr.getParent().setRight(curr.getRight());
+            }
+            curr.setParent(null);
+            curr.setRight(null);
+            return val;
+        }
+
+        // has two children
         else{
-            return null;
+            V val = curr.getValue();
+            K successorKey = curr.successor().getKey();
+            curr.setKey(curr.successor().getKey());
+            curr.setValue(curr.successor().getValue());
+            this.remove(successorKey);
+            return val;
         }
     }
     
