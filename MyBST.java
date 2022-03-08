@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 
-import javax.management.ValueExp;
-import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
 
 
 public class MyBST<K extends Comparable<K>,V>{
@@ -193,9 +191,27 @@ public class MyBST<K extends Comparable<K>,V>{
         }
     }
     
+    /**
+     * 
+     * @return
+     */
     public ArrayList<MyBSTNode<K, V>> inorder(){
-        // TODO
-        return null;
+        MyBSTNode<K,V> curr = this.root;
+        ArrayList<MyBSTNode<K,V>> list = new ArrayList<MyBSTNode<K,V>>();
+
+        // go to the left most node
+        if (this.root.getLeft() != null){
+            while (curr.getLeft() != null) {
+                curr = curr.getLeft();
+            }
+        }
+        // starting at left most node, add the successor
+        for (int i = 0; i < this.size(); i++){
+            list.add(curr);            
+            curr = curr.successor();
+        }
+
+        return list;
     }
 
     static class MyBSTNode<K,V>{
@@ -332,7 +348,7 @@ public class MyBST<K extends Comparable<K>,V>{
         }
 
         /**
-         * This mthodd returns the in order successor of currnet node object.
+         * This method returns the in order predecessor of currnet node object.
          * It can be served as a helpeer method when implementing inorder().
          * @return the predecessor of current node object
          */

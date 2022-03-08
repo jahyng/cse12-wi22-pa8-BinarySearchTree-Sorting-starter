@@ -101,6 +101,7 @@ public class PublicTester {
         ArrayList<MyBST.MyBSTNode<Integer, Integer>> actualRes 
             = completeTree.inorder();
         for (int i=0; i<expectedRes.size(); i++){
+            System.out.println(actualRes.get(i));
             assertSame(expectedRes.get(i), actualRes.get(i));
         }
     }

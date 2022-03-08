@@ -2,11 +2,12 @@ public class MyCalendar {
     MyTreeMap<Integer, Integer> calendar;
     
     public MyCalendar() {
-        // TODO
+        this.calendar = new MyTreeMap<>();
     }
     
     public boolean book(int start, int end) {
-        // TODO
+        if (start < 0 || start >= end) throw new IllegalArgumentException();
+        
         return false;
     }
 
