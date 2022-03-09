@@ -1,6 +1,7 @@
 import java.util.*;
 
 import javax.accessibility.AccessibleAttributeSequence;
+import javax.swing.text.DefaultStyledDocument.ElementSpec;
 
 import static org.junit.Assert.*;
 import org.junit.*;
@@ -148,6 +149,48 @@ public class CustomTester {
         assertEquals(3, leftTree.size());
         assertEquals((Integer)5, root.getKey());
         assertEquals((Integer)50, root.getValue());
+    }
+
+    /**
+     * Test inorder method for complete tree
+     */
+    @Test
+    public void testInOrderCompleteTree(){
+        MyBST.MyBSTNode<Integer, Integer> root = completeTree.root; 
+        ArrayList<MyBST.MyBSTNode<Integer, Integer>> expectedRes 
+            = new ArrayList<>();
+        expectedRes.add(root.getLeft().getLeft());
+        expectedRes.add(root.getLeft());
+        expectedRes.add(root.getLeft().getRight());
+        expectedRes.add(root);
+        expectedRes.add(root.getRight().getLeft());
+        expectedRes.add(root.getRight());
+        expectedRes.add(root.getRight().getRight());
+        expectedRes.add(root.getRight().getRight().getRight());
+        ArrayList<MyBST.MyBSTNode<Integer, Integer>> actualRes 
+            = completeTree.inorder();
+        for (int i = 0; i < 8; i++){
+            assertEquals(expectedRes.get(i), actualRes.get(i));
+        }
+    }
+
+    /**
+     * Test InOrder method for left tree
+     */
+    @Test
+    public void testInOrderLeftTree(){
+        MyBST.MyBSTNode<Integer, Integer> root = leftTree.root; 
+        ArrayList<MyBST.MyBSTNode<Integer, Integer>> expectedRes 
+            = new ArrayList<>();
+        expectedRes.add(root.getLeft().getLeft().getLeft());
+        expectedRes.add(root.getLeft().getLeft());
+        expectedRes.add(root.getLeft());
+        expectedRes.add(root);
+        ArrayList<MyBST.MyBSTNode<Integer, Integer>> actualRes 
+            = leftTree.inorder();
+        for (int i = 0; i < 4; i++){
+            assertEquals(expectedRes.get(i), actualRes.get(i));
+        }
     }
 }
 
