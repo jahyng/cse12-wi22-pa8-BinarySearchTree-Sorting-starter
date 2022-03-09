@@ -120,7 +120,6 @@ public class MyBST<K extends Comparable<K>,V>{
             else if(key.compareTo(currKey) > 0) { 
                 if (curr.getRight() != null) {
                     curr = curr.getRight();
-                    // currValue = curr.getValue();
                     currKey = curr.getKey();
                 }
                 else return null;
@@ -128,7 +127,6 @@ public class MyBST<K extends Comparable<K>,V>{
             else {
                 if (curr.getLeft() != null) {
                     curr = curr.getLeft();
-                    // currValue = curr.getValue();
                     currKey = curr.getKey();
                 }
                 else return null;
@@ -136,6 +134,25 @@ public class MyBST<K extends Comparable<K>,V>{
 
         }
 
+        if(curr == this.root) {
+            V val = this.root.getValue();
+            if (curr.getRight() == null && curr.getLeft() != null){
+                curr.getLeft().setParent(null);
+                this.root = curr.getLeft();
+            }
+            else if (curr.getRight() != null && curr.getLeft() == null){
+                curr.getRight().setParent(this.root.getParent());
+                this.root = curr.getRight();
+            } else if (curr.getRight() != null && curr.getLeft() != null){
+                K successorKey = curr.successor().getKey();
+                curr.setKey(curr.successor().getKey());
+                curr.setValue(curr.successor().getValue());
+                this.remove(successorKey);
+            }
+            this.size--;
+            return val;
+
+        }
         // has no children
         if (curr.getRight() == null && curr.getLeft() == null){
             V val = curr.getValue();
@@ -147,6 +164,7 @@ public class MyBST<K extends Comparable<K>,V>{
             }
             curr.setParent(null);
             curr = null;
+            this.size--;
             return val;
         } 
 
@@ -154,29 +172,39 @@ public class MyBST<K extends Comparable<K>,V>{
         else if (curr.getRight() == null && curr.getLeft() != null){
             V val = curr.getValue();
             curr.getLeft().setParent(curr.getParent());
-            if (curr == curr.getParent().getLeft()) {
-                curr.getParent().setLeft(curr.getLeft());
-            }
-            else{
-                curr.getParent().setRight(curr.getLeft());
-            }
+            // node is not the root
+                if (curr == curr.getParent().getLeft()) {
+                    curr.getParent().setLeft(curr.getLeft());
+                }
+                else{
+                    curr.getParent().setRight(curr.getLeft());
+                }
+                
             curr.setParent(null);
             curr.setLeft(null);
-            return val;
+            this.size--;
+            return val;            
         }
 
         // only right child
         else if (curr.getRight() != null && curr.getLeft() == null){
             V val = curr.getValue();
             curr.getRight().setParent(curr.getParent());
-            if (curr == curr.getParent().getLeft()){
-                curr.getParent().setLeft(curr.getRight());
+
+            // node is not the root
+            if (curr.getParent() != null){
+                if (curr == curr.getParent().getLeft()){
+                    curr.getParent().setLeft(curr.getRight());
+                }
+                else{
+                    curr.getParent().setRight(curr.getRight());
+                }
             }
-            else{
-                curr.getParent().setRight(curr.getRight());
-            }
+
+            // base case when node is the root
             curr.setParent(null);
             curr.setRight(null);
+            this.size--;
             return val;
         }
 
@@ -187,6 +215,7 @@ public class MyBST<K extends Comparable<K>,V>{
             curr.setKey(curr.successor().getKey());
             curr.setValue(curr.successor().getValue());
             this.remove(successorKey);
+            this.size--;
             return val;
         }
     }
