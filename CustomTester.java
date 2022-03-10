@@ -189,6 +189,34 @@ public class CustomTester {
             assertEquals(expectedRes.get(i), actualRes.get(i));
         }
     }
+
+    /**
+     * test calendar book when exception should be thrown
+     */
+    @Test
+    public void testCalendarException(){
+        boolean exceptionThrown = false;
+        MyCalendar cal = new MyCalendar();
+        try{
+            cal.book(4,4);
+        }
+        catch (IllegalArgumentException e){
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+    }
+
+    /**
+     * Test calendar implementation
+     */
+    @Test
+    public void testCalendar(){
+        MyCalendar cal = new MyCalendar();
+        assertTrue(cal.book(3, 6));
+        assertFalse(cal.book(4,7));
+        assertFalse(cal.book(2, 7));
+        assertTrue(cal.book(0, 3));
+    }
 }
 
 
