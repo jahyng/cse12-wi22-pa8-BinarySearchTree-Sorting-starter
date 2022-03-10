@@ -20,12 +20,12 @@ public class MyBST<K extends Comparable<K>,V>{
     public V insert(K key, V value){
         // key is null
         if (key.equals(null)) throw new NullPointerException();
-        MyBSTNode<K,V> curr = this.root;
-        K currKey = this.root.getKey();
-        V currValue = this.root.getValue();
         if (this.root == null) {
             this.root = new MyBSTNode<K,V>(key, value, null);
         }
+        MyBSTNode<K,V> curr = this.root;
+        K currKey = this.root.getKey();
+        V currValue = this.root.getValue();
         while (curr != null) {
             if (currKey.compareTo(key) == 0){
                 V temp = currValue;

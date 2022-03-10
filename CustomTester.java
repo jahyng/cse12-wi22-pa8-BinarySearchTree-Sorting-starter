@@ -1,8 +1,5 @@
+import java.io.UncheckedIOException;
 import java.util.*;
-
-import javax.accessibility.AccessibleAttributeSequence;
-import javax.swing.text.DefaultStyledDocument.ElementSpec;
-
 import static org.junit.Assert.*;
 import org.junit.*;
 
