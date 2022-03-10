@@ -1,9 +1,18 @@
-import java.io.UncheckedIOException;
+/**
+ * Name: Josh Yang
+ * PID: A16667394
+ * Email: jwyag@ucsd.edu
+ * Sources: None
+ * 
+ * This fiel contains a tester for MyBST and calendar.
+ */
 import java.util.*;
 import static org.junit.Assert.*;
 import org.junit.*;
 
-
+/**
+ * This class tests different BSTs and calendars
+ */
 public class CustomTester {
     MyBST<Integer, Integer> completeTree;
     MyBST<Integer, Integer> leftTree;

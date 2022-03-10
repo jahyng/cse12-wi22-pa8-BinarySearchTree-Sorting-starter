@@ -1,7 +1,20 @@
+/**
+ * Name: Josh Yang
+ * PID: A16667394
+ * Email: jwyag@ucsd.edu
+ * Sources: None
+ * 
+ * This file contains the MyBST class which constructs a BST and has multiple 
+ * methods.
+ */
 import java.util.ArrayList;
 
 
-
+/**
+ * This class implemets a BST with methods to insert, delete, serach, and
+ * inorder traversal. There are instance variables rootm which is the root of 
+ * the BST and size which is the nuimber of nodes in the BST.
+ */
 public class MyBST<K extends Comparable<K>,V>{
     MyBSTNode<K,V> root = null;
     int size = 0;
@@ -110,8 +123,7 @@ public class MyBST<K extends Comparable<K>,V>{
 
         MyBSTNode<K,V> curr = this.root;
         K currKey = this.root.getKey();
-        // V currValue = this.root.getValue();
-
+        
         // find the node with key and value
         while (curr != null) {
             if (currKey.compareTo(key) == 0){
@@ -134,31 +146,14 @@ public class MyBST<K extends Comparable<K>,V>{
 
         }
 
-        if(curr == this.root) {
-            V val = this.root.getValue();
-            if (curr.getRight() == null && curr.getLeft() != null){
-                curr.getLeft().setParent(null);
-                this.root = curr.getLeft();
-            }
-            else if (curr.getRight() != null && curr.getLeft() == null){
-                curr.getRight().setParent(this.root.getParent());
-                this.root = curr.getRight();
-            } else if (curr.getRight() != null && curr.getLeft() != null){
-                K successorKey = curr.successor().getKey();
-                curr.setKey(curr.successor().getKey());
-                curr.setValue(curr.successor().getValue());
-                this.remove(successorKey);
-            }
-            this.size--;
-            return val;
-
-        }
-        // has no children
-        if (curr.getRight() == null && curr.getLeft() == null){
+        // no children
+        if (curr.getLeft() == null && curr.getRight() == null){
             V val = curr.getValue();
-            if (curr.getParent().getLeft() == curr) {
+            // if it is a left child
+            if (curr == curr.getParent().getLeft()){
                 curr.getParent().setLeft(null);
             }
+            // curr is right child
             else{
                 curr.getParent().setRight(null);
             }
@@ -166,32 +161,50 @@ public class MyBST<K extends Comparable<K>,V>{
             curr = null;
             this.size--;
             return val;
-        } 
+        }
+
+        // two children
+        else if (curr.getRight() != null && curr.getLeft() != null){
+            V val = curr.getValue();
+            // get the value and key of successor
+            V successorValue = curr.successor().getValue();
+            K successorKey = curr.successor().getKey();
+            // remove successor
+            this.remove(curr.successor().getKey());
+            // set curr value and key
+            curr.setValue(successorValue);
+            curr.setKey(successorKey);
+            return val;
+        }
 
         // only left child
-        else if (curr.getRight() == null && curr.getLeft() != null){
+        else if (curr.getRight() == null){
             V val = curr.getValue();
             curr.getLeft().setParent(curr.getParent());
-            // node is not the root
-                if (curr == curr.getParent().getLeft()) {
+            // curr is not the root
+            if (curr.getParent() != null){
+                if (curr == curr.getParent().getLeft()){
                     curr.getParent().setLeft(curr.getLeft());
                 }
                 else{
                     curr.getParent().setRight(curr.getLeft());
                 }
-                
-            curr.setParent(null);
+            }
+            else{
+                curr.setValue(curr.getLeft().getValue());
+                curr.setKey(curr.getLeft().getKey());
+            }
             curr.setLeft(null);
+            curr.setParent(null);
             this.size--;
-            return val;            
+            return val;
         }
 
         // only right child
-        else if (curr.getRight() != null && curr.getLeft() == null){
+        else{
             V val = curr.getValue();
             curr.getRight().setParent(curr.getParent());
-
-            // node is not the root
+            // curr is not the root
             if (curr.getParent() != null){
                 if (curr == curr.getParent().getLeft()){
                     curr.getParent().setLeft(curr.getRight());
@@ -200,29 +213,21 @@ public class MyBST<K extends Comparable<K>,V>{
                     curr.getParent().setRight(curr.getRight());
                 }
             }
-
-            // base case when node is the root
-            curr.setParent(null);
+            else{
+                curr.setValue(curr.getRight().getValue());
+                curr.setKey(curr.getRight().getKey());
+            }
             curr.setRight(null);
-            this.size--;
+            curr.setParent(null);
+            this.size--;    
             return val;
         }
-
-        // has two children
-        else{
-            V val = curr.getValue();
-            K successorKey = curr.successor().getKey();
-            curr.setKey(curr.successor().getKey());
-            curr.setValue(curr.successor().getValue());
-            this.remove(successorKey);
-            this.size--;
-            return val;
-        }
+        
     }
     
     /**
-     * 
-     * @return
+     * Does an inorderr taversal and appends each node to an arraylist
+     * @return arrayList of nodes in order
      */
     public ArrayList<MyBSTNode<K, V>> inorder(){
         MyBSTNode<K,V> curr = this.root;

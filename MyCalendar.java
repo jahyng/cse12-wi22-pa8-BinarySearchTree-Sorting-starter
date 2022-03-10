@@ -1,13 +1,33 @@
-import javax.swing.text.rtf.RTFEditorKit;
-import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
+/**
+ * Name: Josh Yang
+ * PID: A16667394
+ * Email: jwyag@ucsd.edu
+ * Sources: None
+ * 
+ * This file contians the MyCalendat class which constrcuts a treemap for a 
+ * calendar for real world use.
+ */
 
+ /**
+  * This class implements a treemap and has method book. There is an instance
+  * variable calendar which is a treemap used to book events.
+  */
 public class MyCalendar {
     MyTreeMap<Integer, Integer> calendar;
     
+    /**
+     * No-arg contructor for MyTreeMap calendar
+     */
     public MyCalendar() {
         this.calendar = new MyTreeMap<>();
     }
-    
+    /**
+     * checks if we can book an event with the given start and end times
+     * @param start start time of event, this is the key of node
+     * @param end end time of event, this is the value of node
+     * @return true once event is added
+     * @return false if event cannot be added
+     */
     public boolean book(int start, int end) {
         if (start < 0 || start >= end) throw new IllegalArgumentException();
         // handle case if floor is null
@@ -52,6 +72,10 @@ public class MyCalendar {
 
     }
 
+    /**
+     * getter for calendar
+     * @return calendar
+     */
     public MyTreeMap getCalendar(){
         return this.calendar;
     }
