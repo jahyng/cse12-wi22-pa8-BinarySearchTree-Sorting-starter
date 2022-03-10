@@ -216,6 +216,7 @@ public class CustomTester {
         assertFalse(cal.book(4,7));
         assertFalse(cal.book(2, 7));
         assertTrue(cal.book(0, 3));
+        assertFalse(cal.book(1, 5));
     }
 }
 
